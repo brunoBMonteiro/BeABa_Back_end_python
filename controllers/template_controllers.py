@@ -8,7 +8,6 @@ def validate_template():
     original_file = request.files['originalTemplate']
     filled_file = request.files['filledTemplate']
     is_valid, message = validate_and_save_template(original_file, filled_file)
-
     if is_valid:
         return jsonify({'status': 'approved', 'message': 'Template aprovado!'}), 200
     else:
