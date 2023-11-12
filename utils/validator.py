@@ -11,17 +11,18 @@ def validate_file_structure(original, filled):
         return False, "Nomes das colunas não correspondem após normalização."
 
     for column in original_df.columns:
-        # Normaliza o tipo de dados para a comparação
         original_dtype = str(original_df[column].dtype)
         filled_dtype = str(filled_df[column].dtype)
         
-        # Converte tipos de dados específicos para um tipo genérico para comparação (ex: int64 e float64 para float)
+        # Converte tipos de dados numéricos para um tipo genérico para comparação
         if pd.api.types.is_integer_dtype(original_dtype) and pd.api.types.is_float_dtype(filled_dtype):
             filled_dtype = 'int64'
         if pd.api.types.is_integer_dtype(filled_dtype) and pd.api.types.is_float_dtype(original_dtype):
             original_dtype = 'int64'
-
-        if original_dtype != filled_dtype:
-            return False, f"Tipo de dado incorreto na coluna '{column}'. Original: {original_dtype}, Preenchido: {filled_dtype}"
+        
+        # Adiciona verificação para tipos de dados de data e string
+        if pd.api.types.is_datetime64_any_dtype(original_dtype) or pd.api.types.is_string_dtype(original_dtype):
+            if original_dtype != filled_dtype:
+                return False, f"Tipo de dado incorreto na coluna '{column}'. Original: {original_dtype}, Preenchido: {filled_dtype}"
 
     return True, "A estrutura do arquivo é válida."
