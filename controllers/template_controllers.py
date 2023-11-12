@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import CORS  # Importa a extensão CORS
 from services.template_service import validate_and_save_template
 
 template_blueprint = Blueprint('template_blueprint', __name__)
+CORS(template_blueprint)  # Aplica CORS para este blueprint
 
 @template_blueprint.route('/validate-template', methods=['POST'])
 def validate_template():
