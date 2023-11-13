@@ -41,3 +41,27 @@ def get_count_inactive_templates():
             cursor.execute("SELECT COUNT(*) FROM beaba.templates WHERE status = FALSE;")
             count_inactive_templates = cursor.fetchone()[0]
     return count_inactive_templates
+
+def get_dashboard_data():
+    with create_db_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute("""
+                SELECT 
+                    t.id_template,
+                    t.nome_template,
+                    t.extensao_template,
+                    t.data_cadastrado,
+                    t.status,
+                    t.quantidade_linhas,
+                    t.campos_template,
+                    u.id_usuario as "id_usuario_cadastrado",
+                    u.matricula,
+                    u.email,
+                    u.nome_usuario
+                FROM 
+                    beaba.templates t
+                JOIN 
+                    beaba.usuarios u ON t.id_usuario_cadastrado = u.id_usuario;
+            """)
+            dashboard_data = cursor.fetchall()
+    return dashboard_data
