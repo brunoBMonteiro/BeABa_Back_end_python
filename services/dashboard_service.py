@@ -27,3 +27,17 @@ def get_count_users():
             cursor.execute("SELECT COUNT(*) FROM beaba.usuarios;")
             count_users = cursor.fetchone()[0]
     return count_users
+
+def get_count_active_templates():
+    with create_db_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) FROM beaba.templates WHERE status = TRUE;")
+            count_active_templates = cursor.fetchone()[0]
+    return count_active_templates
+
+def get_count_inactive_templates():
+    with create_db_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) FROM beaba.templates WHERE status = FALSE;")
+            count_inactive_templates = cursor.fetchone()[0]
+    return count_inactive_templates
